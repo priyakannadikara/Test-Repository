@@ -1,0 +1,28 @@
+import { Page } from '@playwright/test';
+import { Locators } from './types';
+
+export default class VendorPage {
+    locators: Locators
+    constructor(public readonly page: Page){
+
+        this.locators ={
+            vendorsButton : this.page.locator('a[href="/c/vendors"]'),
+            addVendorButton : this.page.locator('//span[text()="Add a vendor"]'),
+            vendorName : this.page.locator('div[class*="NameInputWrapper"] input'),
+            contributorsName : this.page.getByPlaceholder('Name'),
+            contributorsEmail : this.page.getByPlaceholder('Email address'),
+            selectddl: this.page.locator('.Select__input-container'),
+            tire: this.page.getByRole('option', { name: 'Tier 1' }),
+            createVendorButton : this.page.locator('//span[text()="Create Vendor"]'),
+        }
+    }
+
+    async createVendor(vendorName:string,contributorsName: string,contributorsEmail:string) {
+        await this.locators.vendorName.waitFor();
+        await this.locators.vendorName.fill(vendorName);
+        await this.locators.contributorsName.fill(contributorsName);
+        await this.locators.contributorsEmail.fill(contributorsEmail);
+        await this.locators.selectddl.click();
+        await this.locators.tire.click();
+        await this.locators.createVendorButton.click();
+    }
